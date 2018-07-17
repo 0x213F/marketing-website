@@ -11,89 +11,106 @@
 }
 
 body { 
-	background-color: #0E0E0E;
-	color: #F2F2F2;
+	background-color: #1E1E1E;
+	color: #EDEDED;
 	font-family: monospace;
 }
 
-.logo {
-	width: 400px;
-	height: 400px;
-	position: relative;
-	border: 4px solid red;
+header {
+	padding: 5vh 0 0 5vh;
 }
 
-.logo > div {
+.logo {
+	width: 14vh;
+	height: 14vh;
+	position: relative;
+	display: block;
+	float: left;
+	border: 1vh solid #EDEDED;
+}
+
+.logo.hex > div {
 	width: 25%;
 	height: 25%;
 	float: left;
 }
 
-.logo > .solid {
-	background-color: white
+.logo.hex > .solid {
+	background-color: #EDEDED;
 }
 
-.logo > .transparent {
-	background-color: red;
+.logo.hex > .transparent {
+	background-color: #1E1E1E;
 }
 
-.view-option {
-	font-size: 1.2em;	
-	padding: 0.5em;
-	border: none;
+.logo.ascii {
+	border-radius: 50%;
+	font-size: 7vh;
+	line-height: 14vh;
+	text-align: center;
+}
+
+header > .views {
+	margin-left: 5vh;
+	display: block;
+	float: left;
+}
+
+header > .views > button {
+	cursor: pointer;
+	font-size: 3vh;
+	background-color: #1E1E1E;
+	color: #EDEDED;
+	border: 0px;	
+	padding: 1vh;
 	text-decoration: underline;
 }
 
-.view-option::before {
+header > .views > button::before {
 	content: '>';
 }
 	</style>
 </head>
 <body>
+	<header>
+		<div class="logo hex">
 
-	<div class="logo">
+			<!-- 2 -->
+			<div class="transparent"></div>
+			<div class="transparent"></div>
+			<div class="solid"></div>
+			<div class="transparent"></div>
 
-		<!-- 2 -->
-		<div class="transparent"></div>
-		<div class="transparent"></div>
-		<div class="solid"></div>
-		<div class="transparent"></div>
+			<!-- 1 -->
+			<div class="transparent"></div>
+                	<div class="transparent"></div>
+                	<div class="transparent"></div>
+                	<div class="solid"></div>
 
-		<!-- 1 -->
-		<div class="transparent"></div>
-                <div class="transparent"></div>
-                <div class="transparent"></div>
-                <div class="solid"></div>
+			<!-- 3 -->
+			<div class="transparent"></div>
+                	<div class="transparent"></div>
+                	<div class="solid"></div>
+                	<div class="solid"></div>
 
-		<!-- 3 -->
-		<div class="transparent"></div>
-                <div class="transparent"></div>
-                <div class="solid"></div>
-                <div class="solid"></div>
-
-		<!-- F -->
-		<div class="solid"></div>
-                <div class="solid"></div>
-                <div class="solid"></div>
-                <div class="solid"></div>
-
-	</div>
-
-	<div class="">
-
-                <button class="view-option">
-                        projects
-                </button>
-
-                <button class="view-option">
-                        developer
-                </button>
-
-                <button class="view-option">
-                        about
-                </button>
-
-	</div>	
+			<!-- F -->
+			<div class="solid"></div>
+                	<div class="solid"></div>
+                	<div class="solid"></div>
+                	<div class="solid"></div>
+		</div>
+		<div class="views">
+                	<button>
+                        	projects
+                	</button>
+                	<button>
+                        	developer
+                	</button>
+		</div>
+		<div class="logo ascii">
+			?!
+		</div>
+	</header>
 
 	<script src="../js/index.js"></script>
 </body>
