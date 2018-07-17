@@ -1,0 +1,100 @@
+<html>
+<head>
+	<title>0x213F</title>
+	
+	<style>
+
+* {
+	margin: 0;
+	border: 0;
+	padding: 0;
+}
+
+body { 
+	background-color: #0E0E0E;
+	color: #F2F2F2;
+	font-family: monospace;
+}
+
+.logo {
+	width: 400px;
+	height: 400px;
+	position: relative;
+	border: 4px solid red;
+}
+
+.logo > div {
+	width: 25%;
+	height: 25%;
+	float: left;
+}
+
+.logo > .solid {
+	background-color: white
+}
+
+.logo > .transparent {
+	background-color: red;
+}
+
+.view-option {
+	font-size: 1.2em;	
+	padding: 0.5em;
+	border: none;
+	text-decoration: underline;
+}
+
+.view-option::before {
+	content: '>';
+}
+	</style>
+</head>
+<body>
+
+	<div class="logo">
+
+		<!-- 2 -->
+		<div class="transparent"></div>
+		<div class="transparent"></div>
+		<div class="solid"></div>
+		<div class="transparent"></div>
+
+		<!-- 1 -->
+		<div class="transparent"></div>
+                <div class="transparent"></div>
+                <div class="transparent"></div>
+                <div class="solid"></div>
+
+		<!-- 3 -->
+		<div class="transparent"></div>
+                <div class="transparent"></div>
+                <div class="solid"></div>
+                <div class="solid"></div>
+
+		<!-- F -->
+		<div class="solid"></div>
+                <div class="solid"></div>
+                <div class="solid"></div>
+                <div class="solid"></div>
+
+	</div>
+
+	<div class="">
+
+                <button class="view-option">
+                        projects
+                </button>
+
+                <button class="view-option">
+                        developer
+                </button>
+
+                <button class="view-option">
+                        about
+                </button>
+
+	</div>	
+
+	<script src="../js/index.js"></script>
+</body>
+</html>
