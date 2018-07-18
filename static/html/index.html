@@ -1,116 +1,71 @@
 <html>
 <head>
 	<title>0x213F</title>
-	
+	<link href="https://fonts.googleapis.com/css?family=Fredoka+One" rel="stylesheet">
+	<link href="../css/index.css" rel="stylesheet">
 	<style>
 
-* {
-	margin: 0;
-	border: 0;
-	padding: 0;
+/* latin */
+@font-face {
+  font-family: 'Fredoka One';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Fredoka One'), local('FredokaOne-Regular'), url(../lib/fredokaone.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
-body { 
-	background-color: #1E1E1E;
-	color: #EDEDED;
-	font-family: monospace;
-}
-
-header {
-	padding: 5vh 0 0 5vh;
-}
-
-.logo {
-	width: 14vh;
-	height: 14vh;
-	position: relative;
-	display: block;
-	float: left;
-	border: 1vh solid #EDEDED;
-}
-
-.logo.hex > div {
-	width: 25%;
-	height: 25%;
-	float: left;
-}
-
-.logo.hex > .solid {
-	background-color: #EDEDED;
-}
-
-.logo.hex > .transparent {
-	background-color: #1E1E1E;
-}
-
-.logo.ascii {
-	border-radius: 50%;
-	font-size: 7vh;
-	line-height: 14vh;
-	text-align: center;
-}
-
-header > .views {
-	margin-left: 5vh;
-	display: block;
-	float: left;
-}
-
-header > .views > button {
-	cursor: pointer;
-	font-size: 3vh;
-	background-color: #1E1E1E;
-	color: #EDEDED;
-	border: 0px;	
-	padding: 1vh;
-	text-decoration: underline;
-}
-
-header > .views > button::before {
-	content: '>';
-}
 	</style>
 </head>
 <body>
 	<header>
-		<div class="logo hex">
+		<div class="clickable-div">
+			<div class="logo hex">
 
-			<!-- 2 -->
-			<div class="transparent"></div>
-			<div class="transparent"></div>
-			<div class="solid"></div>
-			<div class="transparent"></div>
+				<!-- 2 -->
+				<div class="transparent"></div>
+				<div class="transparent"></div>
+				<div class="solid"></div>
+				<div class="transparent"></div>
 
-			<!-- 1 -->
-			<div class="transparent"></div>
-                	<div class="transparent"></div>
-                	<div class="transparent"></div>
-                	<div class="solid"></div>
+				<!-- 1 -->
+				<div class="transparent"></div>
+	                	<div class="transparent"></div>
+	                	<div class="transparent"></div>
+	                	<div class="solid"></div>
 
-			<!-- 3 -->
-			<div class="transparent"></div>
-                	<div class="transparent"></div>
-                	<div class="solid"></div>
-                	<div class="solid"></div>
+				<!-- 3 -->
+				<div class="transparent"></div>
+	                	<div class="transparent"></div>
+	                	<div class="solid"></div>
+	                	<div class="solid"></div>
 
-			<!-- F -->
-			<div class="solid"></div>
-                	<div class="solid"></div>
-                	<div class="solid"></div>
-                	<div class="solid"></div>
+				<!-- F -->
+				<div class="solid"></div>
+	                	<div class="solid"></div>
+	                	<div class="solid"></div>
+	                	<div class="solid"></div>
+			</div>
+			<span class="subtitle">
+				for developers
+			</div>
 		</div>
-		<div class="views">
-                	<button>
-                        	projects
-                	</button>
-                	<button>
-                        	developer
-                	</button>
-		</div>
-		<div class="logo ascii">
-			?!
+		<div class="clickable-div">
+			<div class="logo ascii">
+				?!
+			</div>
+			<span class="subtitle">
+				for consumers
+			</div>
 		</div>
 	</header>
+
+	<footer>
+
+		<a>pronunciation</a>
+		<a>inquiries</a>
+		<a>about</a>
+
+	</footer>
 
 	<script src="../js/index.js"></script>
 </body>

@@ -1,0 +1,64 @@
+* {
+	margin: 0;
+	border: 0;
+	padding: 0;
+}
+
+body {
+	background-color: #1E1E1E;
+	color: #EDEDED;
+	font-family: monospace;
+}
+
+header {
+	padding: 5vh 0 0 5vh;
+}
+
+.logo {
+	width: 14vh;
+	height: 14vh;
+	position: relative;
+	display: block;
+	float: left;
+	border: 1vh solid #EDEDED;
+}
+
+.logo.hex > div {
+	width: 25%;
+	height: 25%;
+	float: left;
+}
+
+.logo.hex > .solid {
+	background-color: #EDEDED;
+}
+
+.logo.hex > .transparent {
+	background-color: #1E1E1E;
+}
+
+.logo.ascii {
+	font-family: 'Fredoka One', cursive;
+	border-radius: 50%;
+	font-size: 7vh;
+	line-height: 14vh;
+	text-align: center;
+}
+
+/* footer */
+
+footer {
+  position: absolute;
+  bottom: 0px;
+  width: 100%;
+}
+
+footer > a {
+  float: right;
+  margin: 0 5vh 3vh 0;
+  text-decoration: underline;
+}
+
+footer > a:hover {
+  cursor: pointer;
+}
