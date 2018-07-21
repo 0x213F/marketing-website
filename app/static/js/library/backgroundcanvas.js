@@ -37,7 +37,7 @@ function BackgroundCanvas(el, renderFunction) {
    * Executes rendering function
    */
   this.runRenderFunction = () => {
-    render(this);
+    render.bind(this)();
   }
 
   /**
