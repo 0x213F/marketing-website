@@ -7,11 +7,45 @@
 body {
 	background-color: #1E1E1E;
 	color: #EDEDED;
-	font-family: monospace;
 }
 
+.hide {
+  height: 0!important;
+}
+
+/* header */
+
 header {
-	padding: 5vh 0 0 5vh;
+	padding: 40vh 0 0 30vh;
+  display: flex;
+  margin: 0 auto;
+}
+
+header > button.clickable {
+  background-color: #1E1E1E;
+  color: #EDEDED;
+  display: grid;
+  padding: 2vh;
+}
+
+header > button.clickable:hover {
+  background-color: #313131;
+  cursor: pointer;
+  border-radius: 0.75vh;
+}
+
+header > button.clickable:focus {
+  background-color: #313131;
+  cursor: pointer;
+  border-radius: 0.75vh;
+  outline: none;
+}
+
+header > button.clickable > span.subtitle {
+  padding-top: 2vh;
+  text-align: center;
+  font-family: 'Fredoka One', cursive;
+  font-size: 2em;
 }
 
 .logo {
@@ -53,12 +87,55 @@ footer {
   width: 100%;
 }
 
-footer > a {
+footer > button {
   float: right;
-  margin: 0 5vh 3vh 0;
+  margin: 0 1vh 0 0;
+  background-color: inherit;
+  color: inherit;
   text-decoration: underline;
+  border-top-left-radius: 0.75vh;
+  border-top-right-radius: 0.75vh;
+  font-size: 1em;
+  padding: 1vh 1.75vh 1.75vh 1.75vh;
+  font-family: 'Space Mono', monospace;
 }
 
-footer > a:hover {
+footer > button:hover {
   cursor: pointer;
+  background-color: #313131;
+  cursor: pointer;
+}
+
+footer > button:focus {
+  background-color: #313131;
+  outline: none;
+}
+
+footer > button.active {
+  cursor: pointer;
+  background-color: #424242;
+  cursor: pointer;
+}
+
+footer > button.first {
+  margin-right: 3vh;
+}
+
+footer > span.random {
+  float: left;
+  font-size: 1em;
+  position: absolute;
+  bottom: 1.5vh;
+}
+
+footer > .content {
+  height: 20vh;
+  transition: height 1s;
+  background-color: #424242;
+  display: block;
+  top: 4vh;
+  position: relative;
+  border-top-left-radius: 0.75vh;
+  border-top-right-radius: 0.75vh;
+  font-family: 'Space Mono', monospace;
 }
