@@ -136,7 +136,7 @@ footer > span.random {
 
 footer > .content {
   height: 20vh;
-  transition: height 1s;
+  transition: height 0.6s;
   background-color: #424242;
   display: block;
   top: 4vh;
