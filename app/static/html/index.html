@@ -6,33 +6,14 @@
 	<link href="../css/index.css" rel="stylesheet">
 </head>
 <body>
+
+	<canvas id="pong"></canvas>
+
 	<header>
 		<button class="clickable" tabindex="1">
 			<div class="logo hex">
 
-				<!-- 2 -->
-				<div class="transparent"></div>
-				<div class="transparent"></div>
-				<div class="solid"></div>
-				<div class="transparent"></div>
-
-				<!-- 1 -->
-				<div class="transparent"></div>
-	                	<div class="transparent"></div>
-	                	<div class="transparent"></div>
-	                	<div class="solid"></div>
-
-				<!-- 3 -->
-				<div class="transparent"></div>
-	                	<div class="transparent"></div>
-	                	<div class="solid"></div>
-	                	<div class="solid"></div>
-
-				<!-- F -->
-				<div class="solid"></div>
-	                	<div class="solid"></div>
-	                	<div class="solid"></div>
-	                	<div class="solid"></div>
+				<img src="../img/hexlogo.png"></img>
 			</div>
 			<span class="subtitle">
 				for developers
@@ -61,7 +42,9 @@
 
 	</footer>
 
-	<script src="../lib/jquery.min.js"></script>
+	<script src="../js/library/backgroundcanvas.js"></script>
+	<script src="../js/library/jquery.min.js"></script>
+	<script src="../js/components/pong.js"></script>
 	<script src="../js/index.js"></script>
 </body>
 </html>

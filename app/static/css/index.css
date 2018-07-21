@@ -63,8 +63,14 @@ header > button.clickable > span.subtitle {
 	float: left;
 }
 
-.logo.hex > .solid {
-	background-color: #EDEDED;
+.logo.hex > img {
+	height: 100%;
+	width: 100%;
+	image-rendering: pixelated;
+	background-color: : #EDEDED;
+	margin: 0;
+	padding: 0;
+	border: 0;
 }
 
 .logo.hex > .transparent {

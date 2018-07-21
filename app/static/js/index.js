@@ -1,4 +1,7 @@
-var $buttons = $("footer").find("button")
+var el = document.getElementById('pong');
+var pong = new Pong(el);
+
+var $buttons = $("footer").find("button");
 
 $buttons.click(e => {
   $(".content").removeClass("hide");
@@ -30,6 +33,8 @@ var aboutHtml = `<p>We are a software studio focused on:</p>
   <li>Creating modular and extensible components for developers.</li>
   <li>Deliver memorable and engaging experiences for consumers.</li>
 </ol>`;
-var inquiriesHtml = ``;
-var pronunciationHtml = ``;
-var privacyHtml = ``;
+var inquiriesHtml = `feedback@0x213F.com
+press@0x213F.com`;
+var pronunciationHtml = `Twenty One Thirty F
+Interrobang`;
+var privacyHtml = `TODO`;
