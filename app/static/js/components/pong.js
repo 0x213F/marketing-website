@@ -2,7 +2,7 @@ function Pong(el) {
 
   var background = new BackgroundCanvas(el);
   var BALL_DIAMETER = 10 * background._scale;
-  var PADDLE_LENGTH = 100;
+  var PADDLE_LENGTH = 1000;
   var VELOCITY = 10; // pixels/ second
   var PADDING = BALL_DIAMETER * 3;
   this.state = {
@@ -59,7 +59,6 @@ function Pong(el) {
         resetStartTime = resetStartTime || calculateX(ball, background, timeDelta, x);
       }
       resetStartTime = resetStartTime || calculateY(ball, background, timeDelta, y);
-
       // reset start time
       if(resetStartTime) {
         ball.startTime = dateNow;
@@ -132,19 +131,29 @@ function Pong(el) {
       // TODO NEXT paddle hit
       // past right paddle
       ball.xVel = -ball.xVel;
+      var oldX = ball.x;
       ball.x = (background._x - PADDING) - (xPos - (background._x - PADDING));
+      if(this.state.paddleRight.y < ball.y && (this.state.paddleRight.y + this.state.paddleRight.length) > ball.y) {
+        console.log("right!")
+      } else {
+        throw "loser!";
+      }
       resetStartTime = true;
     } else if(ball.x < PADDING) {
+      console.log("fdsafd")
       // TODO NEXT paddle hit
       // past left paddle
       ball.xVel = -ball.xVel;
       ball.x = PADDING + (PADDING - xPos);
+      console.log(this.state.paddleLeft.y, ball.y);
+      if(this.state.paddleLeft.y < ball.y && (this.state.paddleLeft.y + this.state.paddleLeft.length) > ball.y) {
+        console.log("left!")
+      } else {
+        throw "loser!";
+      }
       resetStartTime = true;
     } else {
       ball.x = xPos;
-    }
-    if(resetStartTime) {
-      throw "loser!";
     }
     return resetStartTime;
   }
@@ -191,7 +200,7 @@ function Pong(el) {
   var playGame = (training, trials, frames) => {
     try {
       this.state.takeTurn(training, frames);
-    } catch {
+    } catch(e) {
       if(training) {
         setTimeout(function() {
           if(trials) {
@@ -202,6 +211,7 @@ function Pong(el) {
         }.bind(this), 0);
         return;
       } else {
+        console.log(e)
         return;
       }
     }
@@ -217,11 +227,11 @@ function Pong(el) {
     var yLen = this.state.background._y;
     var xLen = this.state.background._x  - 2*PADDING;
     return [
-      Math.floor((a-PADDING)/xLen*9),
+      Math.floor((a-PADDING)/xLen*8+1),
       Math.floor(b/yLen*9),
       Math.floor((c + 10)/20*9),
       Math.floor((d + 10)/20*9),
-      Math.floor(e/(yLen - this.state.leftPaddle.length) * 9)
+      Math.floor((e/(yLen - this.state.paddleLeft.length))/10 * 9)
     ];
   }
 

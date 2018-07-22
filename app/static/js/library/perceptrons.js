@@ -15,6 +15,7 @@ function Perceptrons(dimensions, outputs) {
   this.data = constructMultiLayerPerceptrons(dimensions);
 
   function getPerceptron(inputs) {
+    console.log(inputs)
     var arr = this.data;
     while(inputs.length) {
       idx = inputs.shift();
