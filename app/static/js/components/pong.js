@@ -16,12 +16,12 @@ function Pong(el) {
       xStart: -100,
       yStart: -100,
     },
-    leftPaddle: {
+    paddleLeft: {
       y: 0,
       length: PADDLE_LENGTH * background._scale,
       hitLine: BALL_DIAMETER * 3
     },
-    rightPaddle: {
+    paddleRight: {
       y: 0,
       length: PADDLE_LENGTH * background._scale,
       hitLine: background._y - (BALL_DIAMETER * 3)
@@ -75,53 +75,86 @@ function Pong(el) {
     requestAnimationFrame(loadGame);
   }
 
-  var playGame = (obj) => {
-    var state = this.state;
-    var ball = state.ball;
-    var leftPaddle = state.leftPaddle;
-    var rightPaddle = state.rightPaddle;
-    var background = state.background;
-    var padding = BALL_DIAMETER * 3
-    var x = background._x - padding;
-    var y = background._y - padding;
-    var dateNow = Date.now();
-    var timeDelta = dateNow - ball.startTime;
-    var pos;
+  var calculateX = (ball, background, padding, timeDelta, x) => {
     var resetStartTime = false;
-    // correct x
     var xPos = ball.xStart + timeDelta*ball.xVel;
     if(ball.x > x) {
+      // past right paddle
       ball.xVel = -ball.xVel;
       ball.x = (background._x - padding) - (xPos - (background._x - padding));
       resetStartTime = true;
     } else if(ball.x < padding) {
+      // past left paddle
       ball.xVel = -ball.xVel;
       ball.x = padding + (padding - xPos);
       resetStartTime = true;
     } else {
       ball.x = xPos;
     }
-    // correct y
+    return resetStartTime;
+  }
+
+  var calculateY = (ball, background, padding, timeDelta, y) => {
+    var resetStartTime = false;
     var yPos = ball.yStart + timeDelta*ball.yVel;
     if(ball.y > y) {
+      // past bottom
       ball.yVel = -ball.yVel;
       ball.y = (background._y - padding) - (yPos - (background._y - padding));
       resetStartTime = true;
     } else if(ball.y < padding) {
+      // past top
       ball.yVel = -ball.yVel;
       ball.y = padding + (padding - yPos);
       resetStartTime = true;
     } else {
       ball.y = yPos;
     }
+    return resetStartTime;
+  }
+
+  var calculatePaddleLeft = () => {
+
+  }
+
+  var calculatePaddleRight = () => {
+    
+  }
+
+  var playGame = (training, cycles) => {
+    var state = this.state;
+    var ball = state.ball;
+    var paddleLeft = state.paddleLeft;
+    var paddleRight = state.paddleRight;
+    var background = state.background;
+    var padding = BALL_DIAMETER * 3
+    var x = background._x - padding;
+    var y = background._y - padding;
+    var dateNow = Date.now();
+    var timeDelta = dateNow - ball.startTime;
+    var resetStartTime = false;
+    resetStartTime = resetStartTime || calculateX(ball, background, padding, timeDelta, x);
+    resetStartTime = resetStartTime || calculateY(ball, background, padding, timeDelta, y);
+    calculatePaddleLeft(ball, background, padding, timeDelta, y);
+    calculatePaddleRight(ball, background, padding, timeDelta, y);
     // reset start time
     if(resetStartTime) {
       ball.startTime = dateNow;
       ball.xStart = ball.x;
       ball.yStart = ball.y;
     }
-    drawBall();
-    requestAnimationFrame(playGame);
+    if(training) {
+      if(!cycles) {
+        playGame(training, cycles-1);
+      } else {
+        console.log("taking a break");
+        setTimeout(function() { playGame(training, 100); },100)
+      }
+      playGame(training, cycles-1)
+    } else {
+      drawBall();
+      requestAnimationFrame(playGame);
+    }
   }
 
   var onTrainingComplete = () => {
@@ -130,7 +163,30 @@ function Pong(el) {
   }
 
   var trainModel = (callback) => {
+    var numberOfDecisions = 3;
+    var leftInputs = [
+      this.state.background._x / (BALL_DIAMETER*3),
+      this.state.background._y / (BALL_DIAMETER*3),
+      10, // xVel
+      10, // yVel
+      (this.state.background._y - this.state.paddleLeft.y) / (BALL_DIAMETER*5)
+    ];
+    var rightInputs = [
+      this.state.background._x / (BALL_DIAMETER*3),
+      this.state.background._y / (BALL_DIAMETER*3),
+      10, // xVel
+      10, // yVel
+      (this.state.background._y - this.state.paddleRight.y) / (BALL_DIAMETER*5)
+    ];
+    this.leftBrain = new Perceptrons(leftInputs, numberOfDecisions);
+    this.rightBrain = new Perceptrons(rightInputs, numberOfDecisions);
+    simulate(leftBrain);
+    simulate(rightBrain);
     callback();
+  }
+
+  var simulate = () => {
+    playGame();
   }
 
   trainModel(onTrainingComplete);
