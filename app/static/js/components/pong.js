@@ -67,11 +67,13 @@ function Pong(el) {
         ball.xStart = ball.x;
         ball.yStart = ball.y;
       }
+      var inputsLeft = getDiscreteInputs(ball.x, ball.y, ball.xVel, ball.yVel, state.paddleLeft.y);
+      var inputsRight = getDiscreteInputs(ball.x, ball.y, ball.xVel, ball.yVel, state.paddleRight.y);
+      var decisionLeft = this.brainLeft.action(inputsLeft);
+      var decisionRight = this.brainRight.action(inputsRight);
+      movePaddle("left", decisionLeft);
+      movePaddle("right", decisionRight);
       if(training) {
-        var inputsLeft = getDiscreteInputs(ball.x, ball.y, ball.xVel, ball.yVel, state.paddleLeft.y);
-        var inputsRight = getDiscreteInputs(ball.x, ball.y, ball.xVel, ball.yVel, state.paddleRight.y);
-        var decisionLeft = this.brainLeft.action(inputsLeft);
-        var decisionRight = this.brainRight.action(inputsRight);
       } else {
         drawBall();
       }
@@ -163,6 +165,26 @@ function Pong(el) {
       ball.y = yPos;
     }
     return resetStartTime;
+  }
+
+  var UP = 0;
+  var STAY = 1;
+  var DOWN = 2;
+  var movePaddle = (direction, decision) => {
+    var paddle = direction === "left" ? this.state.paddleLeft : this.state.paddleRight;
+    switch (decision) {
+      case UP:
+        paddle.y -= 5;
+        break;
+      case STAY:
+        // nothing
+        break;
+      case DOWN:
+        paddle.y += 5;
+        break;
+      default:
+        throw "invalid decision";
+    }
   }
 
   var calculatePaddleLeft = () => {
