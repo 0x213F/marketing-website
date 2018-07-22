@@ -18,7 +18,7 @@ function Pong(el) {
     },
     leftPaddle: {
       y: 0,
-      length: PADDLE_LENGTH * background._scale
+      length: PADDLE_LENGTH * background._scale,
       hitLine: BALL_DIAMETER * 3
     },
     rightPaddle: {
@@ -81,9 +81,9 @@ function Pong(el) {
     var leftPaddle = state.leftPaddle;
     var rightPaddle = state.rightPaddle;
     var background = state.background;
-    var zero = BALL_DIAMETER * 3
-    var x = background._x - BALL_DIAMETER * 3;
-    var y = background._y - BALL_DIAMETER * 3;
+    var padding = BALL_DIAMETER * 3
+    var x = background._x - padding;
+    var y = background._y - padding;
     var dateNow = Date.now();
     var timeDelta = dateNow - ball.startTime;
     var pos;
@@ -91,14 +91,12 @@ function Pong(el) {
     // correct x
     var xPos = ball.xStart + timeDelta*ball.xVel;
     if(ball.x > x) {
-      console.log("x went too far")
       ball.xVel = -ball.xVel;
-      ball.x = (BALL_DIAMETER * 3) + ((BALL_DIAMETER * 3) - xPos);
+      ball.x = (background._x - padding) - (xPos - (background._x - padding));
       resetStartTime = true;
-    } else if(ball.x < zero) {
-      console.log("x went too low")
+    } else if(ball.x < padding) {
       ball.xVel = -ball.xVel;
-      ball.x = (background._x - (BALL_DIAMETER * 3)) - (xPos - (background._x - (BALL_DIAMETER * 3)));
+      ball.x = padding + (padding - xPos);
       resetStartTime = true;
     } else {
       ball.x = xPos;
@@ -106,19 +104,16 @@ function Pong(el) {
     // correct y
     var yPos = ball.yStart + timeDelta*ball.yVel;
     if(ball.y > y) {
-      console.log("y went too far")
       ball.yVel = -ball.yVel;
-      ball.y = (BALL_DIAMETER * 3) + ((BALL_DIAMETER * 3) - yPos);
+      ball.y = (background._y - padding) - (yPos - (background._y - padding));
       resetStartTime = true;
-    } else if(ball.y < zero) {
-      console.log("y went too low")
+    } else if(ball.y < padding) {
       ball.yVel = -ball.yVel;
-      ball.y = (background._y - (BALL_DIAMETER * 3)) - (yPos - (background._y - (BALL_DIAMETER * 3)));
+      ball.y = padding + (padding - yPos);
       resetStartTime = true;
     } else {
       ball.y = yPos;
     }
-    //console.log(ball.yVel, ball.y)
     // reset start time
     if(resetStartTime) {
       ball.startTime = dateNow;
