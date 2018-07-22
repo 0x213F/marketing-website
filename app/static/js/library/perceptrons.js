@@ -14,16 +14,16 @@ function Perceptrons(dimensions, outputs) {
   }
   this.data = constructMultiLayerPerceptrons(dimensions);
 
-  function readPerceptron(inputs) {
+  function getPerceptron(inputs) {
     var arr = this.data;
-    var i = 0;
-    while(typeof arr[0] !== "number") {
-      arr = arr.shift();
+    while(inputs.length) {
+      idx = inputs.shift();
+      arr = arr[idx];
     }
     return arr;
   }
   this.action = (inputs) => {
-    var perceptron = readPerceptron.bind(this)(inputs);
+    var perceptron = getPerceptron.bind(this)(inputs);
     var maxVal = -1;
     var maxIdx = -1;
     for(var i=0; i<perceptron.length; i++) {

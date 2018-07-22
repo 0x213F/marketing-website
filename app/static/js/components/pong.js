@@ -59,8 +59,7 @@ function Pong(el) {
         resetStartTime = resetStartTime || calculateX(ball, background, padding, timeDelta, x);
       }
       resetStartTime = resetStartTime || calculateY(ball, background, padding, timeDelta, y);
-      calculatePaddleLeft(ball, background, padding, timeDelta, y);
-      calculatePaddleRight(ball, background, padding, timeDelta, y);
+
       // reset start time
       if(resetStartTime) {
         ball.startTime = dateNow;
@@ -187,14 +186,6 @@ function Pong(el) {
     }
   }
 
-  var calculatePaddleLeft = () => {
-
-  }
-
-  var calculatePaddleRight = () => {
-
-  }
-
   var playGame = (training, trials, frames) => {
     try {
       this.state.takeTurn(training, frames);
@@ -221,11 +212,10 @@ function Pong(el) {
   }
 
   var getDiscreteInputs = (a, b, c, d, e) => {
-    return [a, b, c, d, e];
+    return [0, 0, 0, 0, 0];
   }
 
   this.onTrainingComplete = () => {
-    console.log("complete")
     background.setRenderFunction(loadGame);
     background.runRenderFunction();
   }
