@@ -129,11 +129,13 @@ function Pong(el) {
     var resetStartTime = false;
     var xPos = ball.xStart + timeDelta*ball.xVel;
     if(ball.x > x) {
+      // TODO NEXT paddle hit
       // past right paddle
       ball.xVel = -ball.xVel;
       ball.x = (background._x - padding) - (xPos - (background._x - padding));
       resetStartTime = true;
     } else if(ball.x < padding) {
+      // TODO NEXT paddle hit
       // past left paddle
       ball.xVel = -ball.xVel;
       ball.x = padding + (padding - xPos);
@@ -212,7 +214,7 @@ function Pong(el) {
   }
 
   var getDiscreteInputs = (a, b, c, d, e) => {
-    return [0, 0, 0, 0, 0];
+    return [0, 0, 0, 0, 0]; // TODO NEXT
   }
 
   this.onTrainingComplete = () => {
