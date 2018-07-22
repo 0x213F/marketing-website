@@ -220,8 +220,8 @@ function Pong(el) {
 
   }
 
-  var getDiscreteInputs = () => {
-
+  var getDiscreteInputs = (a, b, c, d, e) => {
+    return [a, b, c, d, e];
   }
 
   this.onTrainingComplete = () => {
