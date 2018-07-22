@@ -5,7 +5,7 @@ function Perceptrons(dimensions, outputs) {
     if(dimensions.length > 0) {
       var length = dimensions.shift();
       for(var i=0; i<length; i++) {
-        data.push(constructMultiLayerPerceptrons(dimensions))
+        data.push(constructMultiLayerPerceptrons(dimensions.slice(0)));
       }
     } else {
       data.push(0, 0.1, 0);

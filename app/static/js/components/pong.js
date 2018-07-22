@@ -4,6 +4,7 @@ function Pong(el) {
   var BALL_DIAMETER = 10 * background._scale;
   var PADDLE_LENGTH = 100;
   var VELOCITY = 10; // pixels/ second
+  var PADDING = BALL_DIAMETER * 3;
   this.state = {
     background: background,
     ball: {
@@ -33,9 +34,8 @@ function Pong(el) {
       var paddleLeft = state.paddleLeft;
       var paddleRight = state.paddleRight;
       var background = state.background;
-      var padding = BALL_DIAMETER * 3
-      var x = background._x - padding;
-      var y = background._y - padding;
+      var x = background._x - PADDING;
+      var y = background._y - PADDING;
       var dateNow = Date.now();
       var timeDelta;
       var TRAINING_TIME_STEP = 500;
@@ -47,7 +47,7 @@ function Pong(el) {
       var resetStartTime = false;
       if(training) {
         try {
-          resetStartTime = resetStartTime || calculateX(ball, background, padding, timeDelta, x);
+          resetStartTime = resetStartTime || calculateX(ball, background, timeDelta, x);
         } catch {
           var inputsLeft = getDiscreteInputs(ball.x, ball.y, ball.xVel, ball.yVel, state.paddleLeft.y);
           var inputsRight = getDiscreteInputs(ball.x, ball.y, ball.xVel, ball.yVel, state.paddleRight.y);
@@ -56,9 +56,9 @@ function Pong(el) {
           throw "u lose!"
         }
       } else {
-        resetStartTime = resetStartTime || calculateX(ball, background, padding, timeDelta, x);
+        resetStartTime = resetStartTime || calculateX(ball, background, timeDelta, x);
       }
-      resetStartTime = resetStartTime || calculateY(ball, background, padding, timeDelta, y);
+      resetStartTime = resetStartTime || calculateY(ball, background, timeDelta, y);
 
       // reset start time
       if(resetStartTime) {
@@ -125,20 +125,20 @@ function Pong(el) {
     requestAnimationFrame(loadGame);
   }
 
-  var calculateX = (ball, background, padding, timeDelta, x) => {
+  var calculateX = (ball, background, timeDelta, x) => {
     var resetStartTime = false;
     var xPos = ball.xStart + timeDelta*ball.xVel;
     if(ball.x > x) {
       // TODO NEXT paddle hit
       // past right paddle
       ball.xVel = -ball.xVel;
-      ball.x = (background._x - padding) - (xPos - (background._x - padding));
+      ball.x = (background._x - PADDING) - (xPos - (background._x - PADDING));
       resetStartTime = true;
-    } else if(ball.x < padding) {
+    } else if(ball.x < PADDING) {
       // TODO NEXT paddle hit
       // past left paddle
       ball.xVel = -ball.xVel;
-      ball.x = padding + (padding - xPos);
+      ball.x = PADDING + (PADDING - xPos);
       resetStartTime = true;
     } else {
       ball.x = xPos;
@@ -149,18 +149,18 @@ function Pong(el) {
     return resetStartTime;
   }
 
-  var calculateY = (ball, background, padding, timeDelta, y) => {
+  var calculateY = (ball, background, timeDelta, y) => {
     var resetStartTime = false;
     var yPos = ball.yStart + timeDelta*ball.yVel;
     if(ball.y > y) {
       // past bottom
       ball.yVel = -ball.yVel;
-      ball.y = (background._y - padding) - (yPos - (background._y - padding));
+      ball.y = (background._y - PADDING) - (yPos - (background._y - PADDING));
       resetStartTime = true;
-    } else if(ball.y < padding) {
+    } else if(ball.y < PADDING) {
       // past top
       ball.yVel = -ball.yVel;
-      ball.y = padding + (padding - yPos);
+      ball.y = PADDING + (PADDING - yPos);
       resetStartTime = true;
     } else {
       ball.y = yPos;
@@ -214,7 +214,15 @@ function Pong(el) {
   }
 
   var getDiscreteInputs = (a, b, c, d, e) => {
-    return [0, 0, 0, 0, 0]; // TODO NEXT
+    var yLen = this.state.background._y;
+    var xLen = this.state.background._x  - 2*PADDING;
+    return [
+      Math.floor((a-PADDING)/xLen*9),
+      Math.floor(b/yLen*9),
+      Math.floor((c + 10)/20*9),
+      Math.floor((d + 10)/20*9),
+      Math.floor(e/(yLen - this.state.leftPaddle.length) * 9)
+    ];
   }
 
   this.onTrainingComplete = () => {
@@ -222,25 +230,27 @@ function Pong(el) {
     background.runRenderFunction();
   }
 
+  var PERCEPTRON_BOARD_WIDTH = (BALL_DIAMETER*3);
+  var PERCEPTRON_PADDLE_WIDTH = (BALL_DIAMETER*5);
   var trainModel = (callback) => {
     var numberOfDecisions = 3;
     var leftInputs = [
-      this.state.background._x / (BALL_DIAMETER*3),
-      this.state.background._y / (BALL_DIAMETER*3),
-      10, // xVel
-      10, // yVel
-      (this.state.background._y - this.state.paddleLeft.y) / (BALL_DIAMETER*5)
+      10, // ball.x
+      10, // ball.y
+      10, // ball.xVel
+      10, // ball.yVel
+      10  // paddle.y
     ];
     var rightInputs = [
-      this.state.background._x / (BALL_DIAMETER*3),
-      this.state.background._y / (BALL_DIAMETER*3),
-      10, // xVel
-      10, // yVel
-      (this.state.background._y - this.state.paddleRight.y) / (BALL_DIAMETER*5)
+      10, // ball.x
+      10, // ball.y
+      10, // ball.xVel
+      10, // ball.yVel
+      10  // paddle.y
     ];
     this.brainLeft = new Perceptrons(leftInputs, numberOfDecisions);
     this.brainRight = new Perceptrons(rightInputs, numberOfDecisions);
-    this.simulate(1000);
+    this.simulate(10);
   }
 
   this.simulate = (trials) => {
