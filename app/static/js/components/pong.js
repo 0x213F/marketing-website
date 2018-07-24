@@ -1,8 +1,10 @@
 function Pong(el) {
 
   var background = new BackgroundCanvas(el);
+  this.background = background;
+  this.deadZones = []
   var BALL_DIAMETER = 10 * background._scale;
-  var PADDLE_LENGTH = 1000;
+  var PADDLE_LENGTH = 100;
   var VELOCITY = 10; // pixels/ second
   var PADDING = BALL_DIAMETER * 3;
   this.state = {
@@ -38,37 +40,52 @@ function Pong(el) {
       var y = background._y - PADDING;
       var dateNow = Date.now();
       var timeDelta;
-      var TRAINING_TIME_STEP = 500;
+      var TRAINING_TIME_STEP = 100;
       if(training) {
-        timeDelta = ball.startTime + frames*TRAINING_TIME_STEP;
+        timeDelta = (frames - ball.startTime)*TRAINING_TIME_STEP;
       } else {
         timeDelta = dateNow - ball.startTime;
       }
       var resetStartTime = false;
-      if(training) {
-        try {
-          resetStartTime = resetStartTime || calculateX(ball, background, timeDelta, x);
-        } catch {
-          var inputsLeft = getDiscreteInputs(ball.x, ball.y, ball.xVel, ball.yVel, state.paddleLeft.y);
-          var inputsRight = getDiscreteInputs(ball.x, ball.y, ball.xVel, ball.yVel, state.paddleRight.y);
-          this.brainLeft.lose(inputsLeft);
-          this.brainRight.lose(inputsLeft);
-          throw "u lose!"
-        }
-      } else {
+      try {
         resetStartTime = resetStartTime || calculateX(ball, background, timeDelta, x);
+      } catch {
+        var inputsLeft = getDiscreteInputs(ball.x, ball.y, ball.xVel, ball.yVel, state.paddleLeft.y);
+        var inputsRight = getDiscreteInputs(ball.x, ball.y, ball.xVel, ball.yVel, state.paddleRight.y);
+        this.brainLeft.action(inputsLeft, -1);
+        this.brainRight.action(inputsLeft, -1);
+        throw "u lose!"
+      }
+
+      var rewardLeft = 0;
+      var rewardRight = 0;
+      if(resetStartTime === "left") {
+        if(this.state.paddleLeft.y < ball.y && (this.state.paddleLeft.y + this.state.paddleLeft.length) > ball.y) {
+          rewardLeft = 1;
+        }
+        resetStartTime = true;
+      }
+      if(resetStartTime === "right") {
+        if(this.state.paddleRight.y < ball.y && (this.state.paddleRight.y + this.state.paddleRight.length) > ball.y) {
+          rewardRight = 1;
+        }
+        resetStartTime = true;
       }
       resetStartTime = resetStartTime || calculateY(ball, background, timeDelta, y);
       // reset start time
       if(resetStartTime) {
-        ball.startTime = dateNow;
+        if(training) {
+          ball.startTime = frames;
+        } else {
+          ball.startTime = dateNow;
+        }
         ball.xStart = ball.x;
         ball.yStart = ball.y;
       }
       var inputsLeft = getDiscreteInputs(ball.x, ball.y, ball.xVel, ball.yVel, state.paddleLeft.y);
       var inputsRight = getDiscreteInputs(ball.x, ball.y, ball.xVel, ball.yVel, state.paddleRight.y);
-      var decisionLeft = this.brainLeft.action(inputsLeft);
-      var decisionRight = this.brainRight.action(inputsRight);
+      var decisionLeft = this.brainLeft.action(inputsLeft, rewardLeft);
+      var decisionRight = this.brainRight.action(inputsRight, rewardRight);
       movePaddle("left", decisionLeft);
       movePaddle("right", decisionRight);
       if(training) {
@@ -100,6 +117,11 @@ function Pong(el) {
     ctx.fillStyle = "#EDEDED";
     ctx.fill();
     ctx.stroke();
+
+    ctx.fillStyle="#FFFFFF";
+    ctx.fillRect(state.background._x - PADDING, state.paddleLeft.y, state.background._x, state.paddleLeft.length * state.background._scale);
+    ctx.fillStyle="#FFFFFF";
+    ctx.fillRect(0, state.paddleRight.y, PADDING, state.paddleRight.length * state.background._scale);
   }
 
   var loadGame = (training) => {
@@ -113,6 +135,8 @@ function Pong(el) {
       ball.x = ball.xStart = BALL_DIAMETER * -2;
       ball.y = ball.yStart = BALL_DIAMETER * 2 + state.background._y;
     } else if(Date.now() - ball.startTime > 200) {
+      this.brainLeft.lastState = null;
+      this.brainRight.lastState = null;
       playGame();
       return;
     }
@@ -134,24 +158,22 @@ function Pong(el) {
       var oldX = ball.x;
       ball.x = (background._x - PADDING) - (xPos - (background._x - PADDING));
       if(this.state.paddleRight.y < ball.y && (this.state.paddleRight.y + this.state.paddleRight.length) > ball.y) {
-        console.log("right!")
+        //console.log("right!")
       } else {
         throw "loser!";
       }
-      resetStartTime = true;
+      return "right"
     } else if(ball.x < PADDING) {
-      console.log("fdsafd")
       // TODO NEXT paddle hit
-      // past left paddle
+      // past left paddlef
       ball.xVel = -ball.xVel;
       ball.x = PADDING + (PADDING - xPos);
-      console.log(this.state.paddleLeft.y, ball.y);
       if(this.state.paddleLeft.y < ball.y && (this.state.paddleLeft.y + this.state.paddleLeft.length) > ball.y) {
-        console.log("left!")
+        //console.log("left!");
       } else {
         throw "loser!";
       }
-      resetStartTime = true;
+      return "left"
     } else {
       ball.x = xPos;
     }
@@ -185,12 +207,18 @@ function Pong(el) {
     switch (decision) {
       case UP:
         paddle.y -= 5;
+        if(paddle.y < 0) {
+          paddle.y = 0;
+        }
         break;
       case STAY:
         // nothing
         break;
       case DOWN:
         paddle.y += 5;
+        if(paddle.y > this.state.background._y - paddle.length) {
+          paddle.y = this.state.background._y - paddle.length;
+        }
         break;
       default:
         throw "invalid decision";
@@ -211,7 +239,6 @@ function Pong(el) {
         }.bind(this), 0);
         return;
       } else {
-        console.log(e)
         return;
       }
     }
@@ -260,14 +287,15 @@ function Pong(el) {
     ];
     this.brainLeft = new Perceptrons(leftInputs, numberOfDecisions);
     this.brainRight = new Perceptrons(rightInputs, numberOfDecisions);
-    this.simulate(10);
+    this.simulate(10000);
   }
 
   this.simulate = (trials) => {
+    console.log(trials)
     var state = this.state;
     var ball = state.ball;
 
-    ball.startTime = Date.now();
+    ball.startTime = 0;
     var rad = ((1/4) * Math.PI * Math.random()) + ((1/8) * Math.PI);
     ball.xVel = Math.abs(Math.cos(rad));
     ball.yVel = -Math.abs(Math.sin(rad));
@@ -283,6 +311,16 @@ function Pong(el) {
       } catch {}
     } else {
       this.onTrainingComplete.bind(this)();
+      console.log(JSON.stringify(this.brainLeft.data))
+      /* document.write(JSON.stringify(this.brainLeft.data) + `
+
+
+
+
+
+
+
+      ` + JSON.stringify(this.brainRight.data)) */
     }
   }
 
